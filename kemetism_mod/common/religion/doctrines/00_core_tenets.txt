@@ -297,7 +297,10 @@
 				religion_tag = zoroastrianism_religion
 				AND = {
 					has_doctrine = pagan_hostility_doctrine
-					NOT = { religion_tag = kushitism_religion }
+					NOR = {
+						religion_tag = kushitism_religion
+						religion_tag = kemetism_religion
+					}
 				}
 			}
 		}
@@ -2082,6 +2085,65 @@
 		traits = {
 			virtues = { honest }
 			sins = { wrathful }
+		}
+	}
+
+	tenet_pesedjet_syncretism = {
+		icon = core_tenet_bigbook
+		piety_cost = {
+			if = {
+				limit = { flag:doctrine_pluralism_pluralistic = {is_in_list = selected_doctrines} }
+				value = faith_tenet_cost_low
+			}
+			else_if = {
+				limit = { flag:doctrine_pluralism_fundamentalist = {is_in_list = selected_doctrines} }
+				value = faith_tenet_cost_high
+			}
+			else = {
+				value = faith_tenet_cost_mid
+			}
+
+			# Multiplier for keeping same tenet
+			if = {
+				limit = { has_doctrine = tenet_pesedjet_syncretism }
+				multiply = faith_unchanged_doctrine_cost_mult
+			}
+		}
+
+
+		is_shown = {
+			religion_tag = kemetism_religion
+		}
+		can_pick = {
+			custom_description = {
+				text = incompatible_tenet_other_syncretism_trigger
+				NOR = {
+					flag:tenet_eastern_syncretism = { is_in_list = selected_doctrines }
+					flag:tenet_christian_syncretism = { is_in_list = selected_doctrines }
+					flag:tenet_islamic_syncretism = { is_in_list = selected_doctrines }
+					flag:tenet_jewish_syncretism = { is_in_list = selected_doctrines }
+				}
+			}
+			custom_description = {
+				text = incompatible_tenet_adaptive_trigger
+				NOT = { flag:tenet_adaptive = { is_in_list = selected_doctrines } }
+			}
+		}
+		parameters = {
+			hostility_override_unreformed_faith_doctrine = 1
+			reduced_vassal_religion_discontent = yes
+			increased_dynasty_prestige_long_reign_mult = 0.5
+			unreformed_syncretic_conversion_malus_active = yes
+		}
+		character_modifier = {
+			short_reign_duration_mult = -0.5
+			different_faith_county_opinion_mult = -0.25
+			different_faith_liege_opinion = 10
+			opinion_of_different_faith_liege = 10
+		}
+		traits = {
+			virtues = { humble }
+			sins = { arrogant }
 		}
 	}
 
